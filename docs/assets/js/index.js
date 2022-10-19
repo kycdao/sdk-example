@@ -12,7 +12,9 @@ const getKycDaoApiStatus = async () => {
   const status = await window.kycDao.getServerStatus();
 
   const elem = document.getElementById("api-status");
-  elem.innerHTML = `Status message: ${status.apiStatus}`;
+  elem.innerHTML = `Connection to <b>${status.serverBaseUrl}</b> is <b>${
+    status.isOk ? "OK" : "not OK"
+  }</b> - Status message: ${status.apiStatus}`;
 };
 
 const residencyOptionsSetup = () => {
@@ -35,9 +37,9 @@ const networkOptionsSetup = () => {
     option.value = network;
     networkPicker.add(option);
   }
-}
+};
 
-const kycNftCheckSetup = () => {  
+const kycNftCheckSetup = () => {
   const form = document.getElementById("nft-check-form");
   const status = document.getElementById("kycnft-status");
   const button = document.getElementById("kycnft-check");
@@ -53,7 +55,7 @@ const kycNftCheckSetup = () => {
         networkAndAddress: {
           blockchainNetwork: netwrok,
           address: address,
-        }
+        },
       };
 
       try {
@@ -64,13 +66,14 @@ const kycNftCheckSetup = () => {
           status.innerHTML = "Wallet does not have a valid kycNFT";
         }
       } catch (e) {
-        status.innerHTML = typeof e === "string" ? e : e?.message || "Unknown error";
+        status.innerHTML =
+          typeof e === "string" ? e : e?.message || "Unknown error";
       }
     } else {
       status.innerHTML = "Please select a network and set an address.";
     }
   });
-}
+};
 
 const walletChanged = new Event("walletChanged");
 const loginStatusChanged = new Event("loginStatusChanged");
@@ -237,7 +240,8 @@ const connectedKycNftCheckSetup = () => {
         status.innerHTML = "Connected wallet does not have a valid kycNFT";
       }
     } catch (e) {
-      status.innerHTML = typeof e === "string" ? e : e?.message || "Unknown error";
+      status.innerHTML =
+        typeof e === "string" ? e : e?.message || "Unknown error";
     }
   });
 
@@ -465,7 +469,11 @@ const main = () => {
 
     const kycDaoConfig = {
       baseUrl: "https://staging.kycdao.xyz",
-      enabledBlockchainNetworks: ["NearTestnet", "PolygonMumbai", "EthereumGoerli"],
+      enabledBlockchainNetworks: [
+        "NearTestnet",
+        "PolygonMumbai",
+        "EthereumGoerli",
+      ],
       enabledVerificationTypes: ["KYC"],
       demoMode: true,
       evmProvider: window.ethereum,
@@ -486,7 +494,7 @@ const main = () => {
         : "None";
     } catch (e) {
       sdkStatus.innerHTML = "Failed to initialize";
-      sdkInitError.innerHTML = e.toString;
+      sdkInitError.innerHTML = e.toString();
       sdkInitSpinner.classList.remove("hidden");
       console.error(`kycDAO SDK initialization error: ${e}`);
     }

@@ -12,7 +12,9 @@ const getKycDaoApiStatus = async () => {
   const status = await window.kycDao.getServerStatus();
 
   const elem = document.getElementById("api-status");
-  elem.innerHTML = `Status message: ${status.apiStatus}`;
+  elem.innerHTML = `Connection to <b>${status.serverBaseUrl}</b> is <b>${
+    status.isOk ? "OK" : "not OK"
+  }</b> - Status message: ${status.apiStatus}`;
 };
 
 const residencyOptionsSetup = () => {
@@ -24,6 +26,53 @@ const residencyOptionsSetup = () => {
     option.value = country.iso_cca2;
     taxResidencyPicker.add(option);
   }
+};
+
+const networkOptionsSetup = () => {
+  const networkPicker = document.getElementById("nft-check-network");
+
+  for (const network of kycDaoStatus.availableBlockchainNetworks) {
+    const option = document.createElement("option");
+    option.text = network;
+    option.value = network;
+    networkPicker.add(option);
+  }
+};
+
+const kycNftCheckSetup = () => {
+  const form = document.getElementById("nft-check-form");
+  const status = document.getElementById("kycnft-status");
+  const button = document.getElementById("kycnft-check");
+
+  status.innerHTML = "Unknown";
+
+  button.addEventListener("click", async () => {
+    const netwrok = form["nft-check-network"]?.value;
+    const address = form["nft-check-address"]?.value;
+
+    if (netwrok && address) {
+      const options = {
+        networkAndAddress: {
+          blockchainNetwork: netwrok,
+          address: address,
+        },
+      };
+
+      try {
+        const hasValidKycNft = await kycDao.hasValidNft("KYC", options);
+        if (hasValidKycNft) {
+          status.innerHTML = "Wallet has a valid kycNFT";
+        } else {
+          status.innerHTML = "Wallet does not have a valid kycNFT";
+        }
+      } catch (e) {
+        status.innerHTML =
+          typeof e === "string" ? e : e?.message || "Unknown error";
+      }
+    } else {
+      status.innerHTML = "Please select a network and set an address.";
+    }
+  });
 };
 
 const walletChanged = new Event("walletChanged");
@@ -163,32 +212,40 @@ const kycDaoLoginSetup = () => {
   updateKycDaoLoginElements();
 };
 
-const updateKycNftCheckElements = () => {
-  const button = document.getElementById("kycnft-check");
+const updateConnectedKycNftCheckElements = () => {
+  const status = document.getElementById("connected-kycnft-status");
+  const button = document.getElementById("connected-kycnft-check");
+
+  status.innerHTML = "Unknown";
 
   if (!kycDao.walletConnected) {
     button.disabled = true;
     button.title = "No wallet connected";
+  } else {
+    button.removeAttribute("disabled");
+    button.title = "";
   }
 };
 
-const kycNftCheckSetup = () => {
-  const status = document.getElementById("kycnft-status");
-  const button = document.getElementById("kycnft-check");
+const connectedKycNftCheckSetup = () => {
+  const status = document.getElementById("connected-kycnft-status");
+  const button = document.getElementById("connected-kycnft-check");
 
   button.addEventListener("click", async () => {
-    status.innerHTML = "Feature not implemented yet";
-    /* const hasKycNft = await kycDao.walletHasKycNft();
-    if (hasKycNft) {
-      status.innerHTML = "Connected wallet already has a kycNFT";
-    } else {
-      status.innerHTML = "Connected wallet does not have a kycNFT yet";
-    } */
+    try {
+      const hasValidKycNft = await kycDao.hasValidNft("KYC");
+      if (hasValidKycNft) {
+        status.innerHTML = "Connected wallet has a valid kycNFT";
+      } else {
+        status.innerHTML = "Connected wallet does not have a valid kycNFT";
+      }
+    } catch (e) {
+      status.innerHTML =
+        typeof e === "string" ? e : e?.message || "Unknown error";
+    }
   });
 
-  status.innerHTML = "Not checked yet";
-
-  updateKycNftCheckElements();
+  updateConnectedKycNftCheckElements();
 };
 
 const disableFormInputs = ({ form, disable = true, ignoreIds = [] }) => {
@@ -397,7 +454,7 @@ const mintingOptionsSetup = () => {
 const updateElementsOnWalletChange = () => {
   updateWalletConnectionElements();
   updateKycDaoLoginElements();
-  updateKycNftCheckElements();
+  updateConnectedKycNftCheckElements();
 };
 
 const updateElementsOnLoginStatusChange = async () => {
@@ -412,7 +469,11 @@ const main = () => {
 
     const kycDaoConfig = {
       baseUrl: "https://staging.kycdao.xyz",
-      enabledBlockchainNetworks: ["NearTestnet", "PolygonMumbai"],
+      enabledBlockchainNetworks: [
+        "NearTestnet",
+        "PolygonMumbai",
+        "EthereumGoerli",
+      ],
       enabledVerificationTypes: ["KYC"],
       demoMode: true,
       evmProvider: window.ethereum,
@@ -433,11 +494,13 @@ const main = () => {
         : "None";
     } catch (e) {
       sdkStatus.innerHTML = "Failed to initialize";
-      sdkInitError.innerHTML = e.toString;
+      sdkInitError.innerHTML = e.toString();
       sdkInitSpinner.classList.remove("hidden");
       console.error(`kycDAO SDK initialization error: ${e}`);
     }
     sdkInitSpinner.classList.add("hidden");
+
+    networkOptionsSetup();
 
     // 1. Check initialized API status
     await getKycDaoApiStatus();
@@ -445,20 +508,22 @@ const main = () => {
       .getElementById("check-api-status")
       .addEventListener("click", getKycDaoApiStatus);
 
-    // 2. web3 login
-    walletConnectionSetup();
-
-    // 3. kycDAO login
-    kycDaoLoginSetup();
-
-    // 4. Check if wallet has kycDAO NFT (on-chain)
-    // ⚠️ only use this for access control on your backend (server-side) ⚠️
+    // 2. Check if a wallet has a valid kycDAO NFT (on-chain)
     kycNftCheckSetup();
 
-    // 5. Identity verification
+    // 3. web3 login
+    walletConnectionSetup();
+
+    // 4. kycDAO login
+    kycDaoLoginSetup();
+
+    // 5. Check if the connected wallet has a valid kycDAO NFT (on-chain)
+    connectedKycNftCheckSetup();
+
+    // 6. Identity verification
     verificationSetup();
 
-    // 6. mint kycNFT
+    // 7. mint kycNFT
     mintingOptionsSetup();
   })();
 };

@@ -81,9 +81,11 @@ const loginStatusChanged = new Event("loginStatusChanged");
 const updateWalletConnectionElements = () => {
   const evmStatus = document.getElementById("evm-status");
   const nearStatus = document.getElementById("near-status");
+  const solanaStatus = document.getElementById("solana-status");
   const walletStatus = document.getElementById("wallet-status");
   const evmButton = document.getElementById("evm-login");
   const nearButton = document.getElementById("near-login");
+  const solanaButton = document.getElementById("solana-login");
   const logoutButton = document.getElementById("wallet-logout");
 
   const evmProviderConfigured = kycDaoStatus.evmProviderConfigured;
@@ -97,21 +99,28 @@ const updateWalletConnectionElements = () => {
 
   const nearNetwork = kycDaoStatus.nearNetworkConnected;
   nearStatus.innerHTML = nearNetwork
-    ? `Connected to ${nearNetwork}`
+    ? `Configured for ${nearNetwork}`
     : "NEAR SDK is not configured";
   if (!nearNetwork) {
     nearButton.disabled = true;
     nearButton.title = "NEAR SDK is not configured";
-    logoutButton.disabled = true;
-    logoutButton.title = "NEAR SDK is not configured";
+  }
+
+  const solanaNetwork = kycDaoStatus.solanaNetworkConnected;
+  solanaStatus.innerHTML = solanaNetwork
+    ? `Configured for ${solanaNetwork}`
+    : "Solana support is not enabled";
+  if (!solanaNetwork) {
+    solanaButton.disabled = true;
+    solanaButton.title = "Solana support is not enabled";
   }
 
   if (!kycDao.walletConnected) {
     walletStatus.innerHTML = "Not connected";
+    logoutButton.disabled = true;
+    logoutButton.title = "Wallet not connected";
 
     if (nearNetwork) {
-      logoutButton.disabled = true;
-      logoutButton.title = "NEAR wallet not connected";
 
       nearButton.removeAttribute("disabled");
       nearButton.title = "";
@@ -129,7 +138,11 @@ const updateWalletConnectionElements = () => {
         break;
       case "Ethereum":
         logoutButton.disabled = true;
-        logoutButton.title = "NEAR wallet not connected";
+        logoutButton.title = "Not available for EVM wallets";
+        break;
+      case "Solana":
+        logoutButton.removeAttribute("disabled");
+        logoutButton.title = "";
         break;
     }
   }
@@ -139,6 +152,7 @@ const walletConnectionSetup = () => {
   const walletStatus = document.getElementById("wallet-status");
   const evmButton = document.getElementById("evm-login");
   const nearButton = document.getElementById("near-login");
+  const solanaButton = document.getElementById("solana-login");
   const logoutButton = document.getElementById("wallet-logout");
 
   evmButton.addEventListener("click", async () => {
@@ -154,6 +168,16 @@ const walletConnectionSetup = () => {
   nearButton.addEventListener("click", async () => {
     try {
       await kycDao.connectWallet("Near");
+      document.dispatchEvent(walletChanged);
+      document.dispatchEvent(loginStatusChanged);
+    } catch (e) {
+      walletStatus.innerHTML = e;
+    }
+  });
+
+  solanaButton.addEventListener("click", async () => {
+    try {
+      await kycDao.connectWallet("Solana");
       document.dispatchEvent(walletChanged);
       document.dispatchEvent(loginStatusChanged);
     } catch (e) {
@@ -473,6 +497,7 @@ const main = () => {
         "NearTestnet",
         "PolygonMumbai",
         "EthereumGoerli",
+        "SolanaDevnet",
       ],
       enabledVerificationTypes: ["KYC"],
       demoMode: true,

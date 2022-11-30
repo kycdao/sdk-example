@@ -8,6 +8,16 @@
     - add minting step
 */
 
+const disableFormInputs = ({ form, disable = true, ignoreIds = [] }) => {
+  if (form instanceof HTMLFormElement) {
+    for (const elem of form.elements) {
+      if (!ignoreIds.includes(elem.id)) {
+        disable ? (elem.disabled = true) : elem.removeAttribute("disabled");
+      }
+    }
+  }
+};
+
 const getKycDaoApiStatus = async () => {
   const status = await window.kycDao.getServerStatus();
 
@@ -60,6 +70,11 @@ const kycNftCheckSetup = () => {
 
       try {
         const hasValidKycNft = await kycDao.hasValidNft("KYC", options);
+        const networkVerifications = await kycDao.checkVerifiedNetworks(
+          "KYC",
+          options
+        );
+        console.log(networkVerifications);
         if (hasValidKycNft) {
           status.innerHTML = "Wallet has a valid kycNFT";
         } else {
@@ -77,6 +92,7 @@ const kycNftCheckSetup = () => {
 
 const walletChanged = new Event("walletChanged");
 const loginStatusChanged = new Event("loginStatusChanged");
+const userDataChanged = new Event("userDataChanged");
 
 const updateWalletConnectionElements = () => {
   const evmStatus = document.getElementById("evm-status");
@@ -121,7 +137,6 @@ const updateWalletConnectionElements = () => {
     logoutButton.title = "Wallet not connected";
 
     if (nearNetwork) {
-
       nearButton.removeAttribute("disabled");
       nearButton.title = "";
     }
@@ -236,6 +251,97 @@ const kycDaoLoginSetup = () => {
   updateKycDaoLoginElements();
 };
 
+const checkEmailConfrimed = async () => {
+  const activeEmail = document.getElementById("active-email");
+  const emailStatus = document.getElementById("email-status");
+  const emailResendStatus = document.getElementById("email-resend-status");
+
+  try {
+    const emailData = await kycDao.checkEmailConfirmed();
+
+    activeEmail.innerHTML = emailData.address || "None";
+    emailResendStatus.innerHTML = "";
+
+    if (emailData.isConfirmed) {
+      emailStatus.innerHTML = "Email address is confirmed";
+    } else {
+      emailStatus.innerHTML = "Email address is not confirmed yet";
+    }
+  } catch (e) {
+    activeEmail.innerHTML = e;
+    emailStatus.innerHTML = e;
+  }
+};
+
+const updateEmailVerificationElements = async () => {
+  const activeEmail = document.getElementById("active-email");
+  const emailStatus = document.getElementById("email-status");
+  const checkEmailButton = document.getElementById("check-email");
+  const resendEmailButton = document.getElementById("resend-email");
+  const emailResendStatus = document.getElementById("email-resend-status");
+
+  const form = document.getElementById("email-verification-form");
+  const submitUpdateEmail = document.getElementById("submit-update-email");
+  const updateEmailStatus = document.getElementById("update-email-status");
+
+  emailResendStatus.innerHTML = "";
+
+  if (!kycDao.loggedIn) {
+    disableFormInputs({ form });
+    activeEmail.innerHTML = "User login required";
+    emailStatus.innerHTML = "User login required";
+    updateEmailStatus.innerHTML = "User login required";
+    checkEmailButton.title = "User login required";
+    resendEmailButton.title = "User login required";
+    submitUpdateEmail.title = "User login required";
+  } else {
+    disableFormInputs({ form, disable: false });
+    updateEmailStatus.innerHTML = "";
+    checkEmailButton.title = "";
+    resendEmailButton.title = "";
+    submitUpdateEmail.title = "";
+    await checkEmailConfrimed();
+  }
+};
+
+const emailVerificationSetup = () => {
+  const checkEmailButton = document.getElementById("check-email");
+  const resendEmailButton = document.getElementById("resend-email");
+  const emailResendStatus = document.getElementById("email-resend-status");
+
+  const form = document.getElementById("email-verification-form");
+  const submitUpdateEmail = document.getElementById("submit-update-email");
+  const updateEmailStatus = document.getElementById("update-email-status");
+
+  checkEmailButton.addEventListener("click", async () => checkEmailConfrimed());
+
+  resendEmailButton.addEventListener("click", async () => {
+    try {
+      await kycDao.resendEmailConfirmationCode();
+      emailResendStatus.innerHTML = "Email successfully sent";
+    } catch (e) {
+      emailResendStatus.innerHTML = e;
+    }
+  });
+
+  submitUpdateEmail.addEventListener("click", async () => {
+    try {
+      const email = form["update-email"]?.value;
+      if (email.trim()) {
+        await kycDao.updateEmail(email);
+        document.dispatchEvent(userDataChanged);
+        updateEmailStatus.innerHTML = "Successful";
+      } else {
+        updateEmailStatus.innerHTML = "Please enter an email address";
+      }
+    } catch (e) {
+      updateEmailStatus.innerHTML = e;
+    }
+  })
+
+  updateEmailVerificationElements();
+};
+
 const updateConnectedKycNftCheckElements = () => {
   const status = document.getElementById("connected-kycnft-status");
   const button = document.getElementById("connected-kycnft-check");
@@ -270,16 +376,6 @@ const connectedKycNftCheckSetup = () => {
   });
 
   updateConnectedKycNftCheckElements();
-};
-
-const disableFormInputs = ({ form, disable = true, ignoreIds = [] }) => {
-  if (form instanceof HTMLFormElement) {
-    for (const elem of form.elements) {
-      if (!ignoreIds.includes(elem.id)) {
-        disable ? (elem.disabled = true) : elem.removeAttribute("disabled");
-      }
-    }
-  }
 };
 
 const updateVerificationElements = () => {
@@ -398,6 +494,7 @@ const verificationSetup = () => {
         },
       };
       await kycDao.startVerification(verificationData, options);
+      document.dispatchEvent(userDataChanged);
     } catch (e) {
       status.innerHTML =
         typeof e === "string" ? e : e?.message || "Unknown error";
@@ -481,10 +578,15 @@ const updateElementsOnWalletChange = () => {
   updateConnectedKycNftCheckElements();
 };
 
-const updateElementsOnLoginStatusChange = async () => {
+const updateElementsOnLoginStatusChange = () => {
+  updateEmailVerificationElements();
   updateVerificationElements();
   updateMintingElements();
 };
+
+const updateElementsOnUserDataChange = () => {
+  updateEmailVerificationElements();
+}
 
 const main = () => {
   (async () => {
@@ -527,28 +629,31 @@ const main = () => {
 
     networkOptionsSetup();
 
-    // 1. Check initialized API status
+    // Check initialized API status
     await getKycDaoApiStatus();
     document
       .getElementById("check-api-status")
       .addEventListener("click", getKycDaoApiStatus);
 
-    // 2. Check if a wallet has a valid kycDAO NFT (on-chain)
+    // Check if a wallet has a valid kycDAO NFT (on-chain)
     kycNftCheckSetup();
 
-    // 3. web3 login
+    // web3 login
     walletConnectionSetup();
 
-    // 4. kycDAO login
-    kycDaoLoginSetup();
-
-    // 5. Check if the connected wallet has a valid kycDAO NFT (on-chain)
+    // Check if the connected wallet has a valid kycDAO NFT (on-chain)
     connectedKycNftCheckSetup();
 
-    // 6. Identity verification
+    // kycDAO login
+    kycDaoLoginSetup();
+
+    // email verification
+    emailVerificationSetup();
+
+    // Identity verification
     verificationSetup();
 
-    // 7. mint kycNFT
+    // mint kycNFT
     mintingOptionsSetup();
   })();
 };
@@ -557,5 +662,9 @@ document.addEventListener("walletChanged", updateElementsOnWalletChange);
 document.addEventListener(
   "loginStatusChanged",
   updateElementsOnLoginStatusChange
+);
+document.addEventListener(
+  "userDataChanged",
+  updateElementsOnUserDataChange
 );
 document.addEventListener("DOMContentLoaded", main);

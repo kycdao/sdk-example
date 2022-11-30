@@ -32,7 +32,7 @@
       integrity="sha256-qo0Cam4XJ0QQ06XnCiCFYBh3GDXU45j3lpUp+em2yBU="
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/@kycdao/kycdao-sdk@0.3.5/dist/kycdao-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@kycdao/kycdao-sdk@0.3.7/dist/kycdao-sdk.min.js"></script>
     <script src="assets/js/index.js"></script>
   </head>
 
@@ -77,7 +77,7 @@
       <!-- Check API status -->
       <div>
         <h3>
-          1. Check initialized API status
+          Check initialized API status
           <button type="button" class="btn btn-primary" id="check-api-status">
             Refresh
           </button>
@@ -91,7 +91,7 @@
       <!-- Check NFT in any wallet on an enabled network - direct, on-chain -->
       <div>
         <h3>
-          2. Check if a wallet has a valid kycDAO NFT (on-chain)
+          Check if a wallet has a valid kycDAO NFT (on-chain)
           <small>Optional</small>
         </h3>
 
@@ -143,7 +143,7 @@
 
       <!-- Connect wallet with kycDAO -->
       <div>
-        <h3>3. Web3 login (connect wallet with kycDAO)</h3>
+        <h3>Web3 login (connect wallet with kycDAO)</h3>
 
         <form class="form-horizontal">
           <div class="form-group">
@@ -214,7 +214,7 @@
       <!-- Check NFT in connected wallet - direct, on-chain -->
       <div>
         <h3>
-          4. Check if the connected wallet has a valid kycDAO NFT (on-chain)
+          Check if the connected wallet has a valid kycDAO NFT (on-chain)
           <small>Optional</small>
         </h3>
 
@@ -245,7 +245,7 @@
 
       <!-- Register/log in user to kycDAO -->
       <div>
-        <h3>5. kycDAO login</h3>
+        <h3>kycDAO login</h3>
 
         <form class="form-horizontal">
           <div class="form-group">
@@ -271,11 +271,95 @@
         <hr />
       </div>
 
+      <!-- Email address verification -->
+      <div>
+        <h3>Email verification</h3>
+
+        <form class="form-horizontal" id="email-verification-form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="active-email"
+              >Active email address:</label
+            >
+            <div class="col-sm-9">
+              <p class="form-control-static" id="active-email"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="email-status"
+              >Email verification status:</label
+            >
+            <div class="col-sm-9">
+              <p class="form-control-static" id="email-status"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-4">
+              <button type="button" class="btn btn-primary" id="check-email">
+                Check
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="resend-email"
+              >Re-send verification email</label
+            >
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-primary" id="resend-email">
+                Send
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="email-resend-status"
+              >Email sending response:</label
+            >
+            <div class="col-sm-9">
+              <p class="form-control-static" id="email-resend-status"></p>
+            </div>
+          </div>
+          <hr />
+          <div class="form-group">
+            <label for="update-email" class="col-sm-3 control-label"
+              >New email address:</label
+            >
+            <div class="col-sm-4">
+              <input
+                type="email"
+                class="form-control"
+                id="update-email"
+                placeholder="Email"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-4">
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="submit-update-email"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="update-email-status"
+              >Update status:</label
+            >
+            <div class="col-sm-6">
+              <p class="form-control-static" id="update-email-status"></p>
+            </div>
+          </div>
+        </form>
+
+        <hr />
+      </div>
+
       <h2>User verification and NFT minting steps</h2>
 
       <!-- Submit required data and start verification -->
       <div>
-        <h3>6. Collect user information and start verification</h3>
+        <h3>Collect user information and start verification</h3>
 
         <form class="form-horizontal" id="verification-form">
           <div class="form-group">
@@ -391,7 +475,7 @@
 
       <!-- NFT minting -->
       <div>
-        <h3>7. Start NFT minting</h3>
+        <h3>Start NFT minting</h3>
 
         <form class="form-horizontal" id="minting-form">
           <div class="form-group">

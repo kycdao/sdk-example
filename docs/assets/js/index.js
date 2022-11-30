@@ -337,7 +337,7 @@ const emailVerificationSetup = () => {
     } catch (e) {
       updateEmailStatus.innerHTML = e;
     }
-  })
+  });
 
   updateEmailVerificationElements();
 };
@@ -510,23 +510,36 @@ const verificationSetup = () => {
   updateVerificationElements();
 };
 
-const updateMintingElements = () => {
+const updateMintingElements = async () => {
   const form = document.getElementById("minting-form");
   const placeholder = document.getElementById("nft-image-placeholder");
-  const image = document.getElementById("nft-image");
+  const imageSpan = document.getElementById("nft-images");
+
+  const getHtml = (imageId, url, index) => {
+    return `      
+      <input type="radio" name="nft-image" id="nft-image-${index}" value="${imageId}" />
+      <label for="nft-image-${index}">
+        <img src="${url}" />
+      </label>
+    `;
+  };
 
   if (!kycDao.loggedIn) {
     disableFormInputs({ form });
-    image.classList.add("hidden");
+    imageSpan.classList.add("hidden");
     placeholder.classList.remove("hidden");
   } else {
-    const url = kycDao.getNftImageUrl();
-    image.setAttribute(
-      "src",
-      `${url}?cachebuster=${new Date().getTime().toString()}`
-    );
+    const imageOptions = await kycDao.getNftImageOptions();
+    imageSpan.classList.add("hidden");
+    imageSpan.innerHTML = "";
+    Object.entries(imageOptions).forEach(([imageId, url], index) => {
+      imageSpan.insertAdjacentHTML(
+        "beforeend",
+        getHtml(imageId, url, index + 1)
+      );
+    });
     placeholder.classList.add("hidden");
-    image.classList.remove("hidden");
+    imageSpan.classList.remove("hidden");
 
     // TODO if verified
     if (true) {
@@ -546,8 +559,8 @@ const mintingOptionsSetup = () => {
   const form = document.getElementById("minting-form");
 
   regenerateButton.addEventListener("click", async () => {
-    await kycDao.regenerateNftImage();
-    updateMintingElements();
+    await kycDao.regenerateNftImageOptions();
+    await updateMintingElements();
   });
 
   mintButton.addEventListener("click", async () => {
@@ -555,14 +568,22 @@ const mintingOptionsSetup = () => {
     spinner.classList.remove("hidden");
     status.innerHTML = "Minting started";
 
-    const mintingData = {
-      disclaimerAccepted: form["disclaimer-accepted"]?.checked,
-    };
-    try {
-      await kycDao.startMinting(mintingData);
-      status.innerHTML = "Minting successful";
-    } catch (e) {
-      status.innerHTML = e;
+    let imageId = form["nft-image"]?.value;
+
+    if (imageId) {
+      const mintingData = {
+        disclaimerAccepted: form["disclaimer-accepted"]?.checked,
+        imageId,
+      };
+
+      try {
+        await kycDao.startMinting(mintingData);
+        status.innerHTML = "Minting successful";
+      } catch (e) {
+        status.innerHTML = e;
+      }
+    } else {
+      status.innerHTML = "Please select an NFT image";
     }
 
     spinner.classList.add("hidden");
@@ -586,7 +607,7 @@ const updateElementsOnLoginStatusChange = () => {
 
 const updateElementsOnUserDataChange = () => {
   updateEmailVerificationElements();
-}
+};
 
 const main = () => {
   (async () => {
@@ -663,8 +684,5 @@ document.addEventListener(
   "loginStatusChanged",
   updateElementsOnLoginStatusChange
 );
-document.addEventListener(
-  "userDataChanged",
-  updateElementsOnUserDataChange
-);
+document.addEventListener("userDataChanged", updateElementsOnUserDataChange);
 document.addEventListener("DOMContentLoaded", main);

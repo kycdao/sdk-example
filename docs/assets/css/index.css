@@ -43,3 +43,28 @@
     transform: rotate(360deg);
   }
 }
+
+#nft-images > input[type="radio"] {
+  display: none;
+}
+
+#nft-images > label > img {
+  width: 86px;
+  height: 86px;
+  padding: 4px;
+}
+
+#nft-images > label > img:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+#nft-images > label > img:active {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+#nft-images > input[type="radio"]:checked + label > img {
+  padding: 2px;
+  border: 2px solid rgb(136, 0, 0);
+}

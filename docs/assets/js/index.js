@@ -541,11 +541,21 @@ const updateMintingElements = async () => {
     placeholder.classList.add("hidden");
     imageSpan.classList.remove("hidden");
 
+    let ignoreIds = [];
+
+    if (kycDao.subscribed) {
+      ignoreIds.push('sub-years');
+      form['sub-years'].placeholder = 'User already subscribed';
+    } else {
+      form['sub-years'].placeholder = 'e.g. 1, 2, 3';      
+    }
+
     // TODO if verified
     if (true) {
       disableFormInputs({
         form,
         disable: false,
+        ignoreIds,
       });
     }
   }
@@ -564,6 +574,12 @@ const mintingOptionsSetup = () => {
   });
 
   mintButton.addEventListener("click", async () => {
+    const subYears = form["sub-years"]?.value;
+    if (!kycDao.subscribed && (isNaN(subYears) || subYears < 1)) {
+      status.innerHTML = "Please enter a number greater than 0 for subscription years";
+      return;
+    }
+
     mintButton.disabled = true;
     spinner.classList.remove("hidden");
     status.innerHTML = "Minting started";
@@ -574,6 +590,7 @@ const mintingOptionsSetup = () => {
       const mintingData = {
         disclaimerAccepted: form["disclaimer-accepted"]?.checked,
         imageId,
+        subscriptionYears: kycDao.subscribed ? undefined : subYears,
       };
 
       try {

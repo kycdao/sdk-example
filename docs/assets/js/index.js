@@ -544,10 +544,11 @@ const updateMintingElements = async () => {
     let ignoreIds = [];
 
     if (kycDao.subscribed) {
-      ignoreIds.push('sub-years');
-      form['sub-years'].placeholder = 'User already subscribed';
+      ignoreIds.push("sub-years");
+      form["sub-years"].disabled = true;
+      form["sub-years"].placeholder = "User already subscribed";
     } else {
-      form['sub-years'].placeholder = 'e.g. 1, 2, 3';      
+      form["sub-years"].placeholder = "e.g. 1, 2, 3";
     }
 
     // TODO if verified
@@ -576,7 +577,8 @@ const mintingOptionsSetup = () => {
   mintButton.addEventListener("click", async () => {
     const subYears = form["sub-years"]?.value;
     if (!kycDao.subscribed && (isNaN(subYears) || subYears < 1)) {
-      status.innerHTML = "Please enter a number greater than 0 for subscription years";
+      status.innerHTML =
+        "Please enter a number greater than 0 for subscription years";
       return;
     }
 
@@ -594,8 +596,8 @@ const mintingOptionsSetup = () => {
       };
 
       try {
-        await kycDao.startMinting(mintingData);
-        status.innerHTML = "Minting successful";
+        const transactionUrl = await kycDao.startMinting(mintingData);
+        status.innerHTML = `Minting successful - <a href="${transactionUrl}">Transaction details</a>`;
       } catch (e) {
         status.innerHTML = e;
       }
@@ -648,14 +650,19 @@ const main = () => {
     const sdkInitError = document.getElementById("init-error");
     const sdkInitSpinner = document.getElementById("init-spinner");
     const sdkRedirEvent = document.getElementById("redirect-event");
+    const sdktransactionUrl = document.getElementById("transaction-url");
     try {
       const kycDaoInitResult = await kycDaoSdk.init(kycDaoConfig);
       window.kycDao = kycDaoInitResult.kycDao;
       window.kycDaoRedirectEvent = kycDaoInitResult.redirectEvent;
+      window.kycDaoTransactionUrl = kycDaoInitResult.transactionUrl;
       window.kycDaoStatus = kycDaoInitResult.sdkStatus;
       sdkStatus.innerHTML = "Initialized";
       sdkRedirEvent.innerHTML = kycDaoRedirectEvent
         ? kycDaoRedirectEvent.toString()
+        : "None";
+      sdktransactionUrl.innerHTML = kycDaoTransactionUrl
+        ? `<a href="${kycDaoTransactionUrl}">link</a>`
         : "None";
     } catch (e) {
       sdkStatus.innerHTML = "Failed to initialize";

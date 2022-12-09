@@ -32,7 +32,7 @@
       integrity="sha256-qo0Cam4XJ0QQ06XnCiCFYBh3GDXU45j3lpUp+em2yBU="
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/@kycdao/kycdao-sdk@0.3.12/dist/kycdao-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@kycdao/kycdao-sdk@0.4.0/dist/kycdao-sdk.min.js"></script>
     <script src="assets/js/index.js"></script>
   </head>
 
@@ -46,11 +46,27 @@
 
       <form class="form-horizontal">
         <div class="form-group">
+          <label for="blockchain-selector" class="col-sm-3 control-label"
+            >Chain type/protocol</label
+          >
+          <div class="col-sm-4">
+            <select class="form-control" id="blockchain-selector"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-4">
+            <button type="button" class="btn btn-primary" id="init-button">
+              Initialize
+            </button>
+          </div>
+        </div>
+        <hr />
+        <div class="form-group">
           <label class="col-sm-3 control-label" for="sdk-status">Status:</label>
           <div class="col-sm-2">
-            <p class="form-control-static" id="sdk-status">Initializing</p>
+            <p class="form-control-static" id="sdk-status">Not initialized</p>
           </div>
-          <div class="col-sm-1 lds-ring" id="init-spinner">
+          <div class="col-sm-1 lds-ring hidden" id="init-spinner">
             <div></div>
             <div></div>
             <div></div>
@@ -421,7 +437,7 @@
             <div class="col-sm-4">
               <select class="form-control" id="verification-type">
                 <option value="KYC">KYC</option>
-                <option value="KYB">Investor Accreditation</option>
+                <!--option value="KYB">Investor Accreditation</option-->
               </select>
             </div>
           </div>

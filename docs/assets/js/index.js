@@ -40,6 +40,7 @@ const residencyOptionsSetup = () => {
 
 const networkOptionsSetup = () => {
   const networkPicker = document.getElementById("nft-check-network");
+  networkPicker.innerHTML = "";
 
   for (const network of kycDaoStatus.availableBlockchainNetworks) {
     const option = document.createElement("option");
@@ -111,6 +112,9 @@ const updateWalletConnectionElements = () => {
   if (!evmProviderConfigured) {
     evmButton.disabled = true;
     evmButton.title = "EVM provider not configured";
+  } else {
+    evmButton.removeAttribute("disabled");
+    evmButton.title = "";
   }
 
   const nearNetwork = kycDaoStatus.nearNetworkConnected;
@@ -129,6 +133,9 @@ const updateWalletConnectionElements = () => {
   if (!solanaNetwork) {
     solanaButton.disabled = true;
     solanaButton.title = "Solana support is not enabled";
+  } else {
+    solanaButton.removeAttribute("disabled");
+    solanaButton.title = "";
   }
 
   if (!kycDao.walletConnected) {
@@ -628,54 +635,71 @@ const updateElementsOnUserDataChange = () => {
   updateEmailVerificationElements();
 };
 
-const main = () => {
-  (async () => {
-    // add tax residency picker country options
-    residencyOptionsSetup();
+let isInitialSetup = true;
 
-    const kycDaoConfig = {
-      baseUrl: "https://staging.kycdao.xyz",
-      enabledBlockchainNetworks: [
-        "NearTestnet",
-        "PolygonMumbai",
-        "EthereumGoerli",
-        "SolanaDevnet",
-      ],
-      enabledVerificationTypes: ["KYC"],
-      demoMode: true,
-      evmProvider: window.ethereum,
-    };
+const initKycdao = async (chain) => {
+  let enabledBlockchainNetworks;
+  switch (chain) {
+    case "Ethereum":
+      enabledBlockchainNetworks = Object.keys(kycDaoSdk.EvmBlockchainNetworks);
+      break;
+    case "Near":
+      enabledBlockchainNetworks = Object.keys(kycDaoSdk.NearBlockchainNetworks);
+      break;
+    case "Solana":
+      enabledBlockchainNetworks = Object.keys(kycDaoSdk.SolanaBlockchainNetworks);
+      break;
+    default:
+      enabledBlockchainNetworks = [];
+      break;
+  }
 
-    const sdkStatus = document.getElementById("sdk-status");
-    const sdkInitError = document.getElementById("init-error");
-    const sdkInitSpinner = document.getElementById("init-spinner");
-    const sdkRedirEvent = document.getElementById("redirect-event");
-    const sdktransactionUrl = document.getElementById("transaction-url");
-    try {
-      const kycDaoInitResult = await kycDaoSdk.init(kycDaoConfig);
-      window.kycDao = kycDaoInitResult.kycDao;
-      window.kycDaoRedirectEvent = kycDaoInitResult.redirectEvent;
-      window.kycDaoTransactionUrl = kycDaoInitResult.transactionUrl;
-      window.kycDaoStatus = kycDaoInitResult.sdkStatus;
-      sdkStatus.innerHTML = "Initialized";
-      sdkRedirEvent.innerHTML = kycDaoRedirectEvent
-        ? kycDaoRedirectEvent.toString()
-        : "None";
-      sdktransactionUrl.innerHTML = kycDaoTransactionUrl
-        ? `<a href="${kycDaoTransactionUrl}">link</a>`
-        : "None";
-    } catch (e) {
-      sdkStatus.innerHTML = "Failed to initialize";
-      sdkInitError.innerHTML = e.toString();
-      sdkInitSpinner.classList.remove("hidden");
-      console.error(`kycDAO SDK initialization error: ${e}`);
-    }
-    sdkInitSpinner.classList.add("hidden");
+  const kycDaoConfig = {
+    baseUrl: "https://staging.kycdao.xyz",
+    enabledBlockchainNetworks,
+    enabledVerificationTypes: ["KYC"],
+    demoMode: true,
+    evmProvider: window.ethereum,
+  };
 
-    networkOptionsSetup();
+  const sdkStatus = document.getElementById("sdk-status");
+  const sdkInitError = document.getElementById("init-error");
+  const sdkInitSpinner = document.getElementById("init-spinner");
+  const sdkRedirEvent = document.getElementById("redirect-event");
+  const sdktransactionUrl = document.getElementById("transaction-url");
 
-    // Check initialized API status
-    await getKycDaoApiStatus();
+  sdkInitSpinner.classList.remove("hidden");
+
+  try {
+    const kycDaoInitResult = await kycDaoSdk.init(kycDaoConfig);
+    window.kycDao = kycDaoInitResult.kycDao;
+    window.kycDaoRedirectEvent = kycDaoInitResult.redirectEvent;
+    window.kycDaoTransactionUrl = kycDaoInitResult.transactionUrl;
+    window.kycDaoStatus = kycDaoInitResult.sdkStatus;
+    sdkStatus.innerHTML = "Initialized";
+    sdkRedirEvent.innerHTML = kycDaoRedirectEvent
+      ? kycDaoRedirectEvent.toString()
+      : "None";
+    sdktransactionUrl.innerHTML = kycDaoTransactionUrl
+      ? `<a href="${kycDaoTransactionUrl}">link</a>`
+      : "None";
+  } catch (e) {
+    sdkStatus.innerHTML = "Failed to initialize";
+    sdkInitError.innerHTML = e.toString();
+    sdkInitError.classList.remove("hidden");
+    console.error(`kycDAO SDK initialization error: ${e}`);
+  }
+
+  sdkInitSpinner.classList.add("hidden");
+
+  networkOptionsSetup();
+
+  // Check initialized API status
+  await getKycDaoApiStatus();
+
+  if (isInitialSetup) {
+    isInitialSetup = false;
+
     document
       .getElementById("check-api-status")
       .addEventListener("click", getKycDaoApiStatus);
@@ -700,6 +724,40 @@ const main = () => {
 
     // mint kycNFT
     mintingOptionsSetup();
+  } else {
+    updateWalletConnectionElements();
+    updateConnectedKycNftCheckElements();
+    updateKycDaoLoginElements();
+    updateEmailVerificationElements();
+    updateVerificationElements();
+    updateMintingElements();
+  }
+};
+
+const chainOptionsSetup = () => {
+  const chainPicker = document.getElementById("blockchain-selector");
+  const initButton = document.getElementById("init-button");
+
+  for (const chain of Object.keys(kycDaoSdk.Blockchains)) {
+    const option = document.createElement("option");
+    option.text = chain;
+    option.value = chain;
+    chainPicker.add(option);
+  }
+
+  initButton.addEventListener("click", async () => {
+    const chain = chainPicker.value;
+    await initKycdao(chain);
+  })
+};
+
+const main = () => {
+  (async () => {
+    // add tax residency picker country options
+    residencyOptionsSetup();
+
+    // chain selector setup for initialization
+    chainOptionsSetup();
   })();
 };
 

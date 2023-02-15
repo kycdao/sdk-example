@@ -1,0 +1,9 @@
+{
+	"name": "evm-no-iframe-react",
+	"scripts": {
+		"start": "yarn run serve"
+	},
+	"devDependencies": {
+		"serve": "^14.2.0"
+	}
+}

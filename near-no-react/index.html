@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>kycDAO example</title>
+	</head>
+	<body>
+		<script
+			src="https://cdn.jsdelivr.net/npm/@kycdao/widget@0.4.3/dist/web/KycDaoClient.js"
+			integrity="sha256-tL/A39E57UBm/t4r0n9Q8z523hzuwIpPpHZKW4FHDYM="
+			crossorigin="anonymous"></script>
+		<div id="container"></div>
+
+		<script>
+			new KycDaoClient({
+				parent: "#container",
+				config: {
+					demoMode: false,
+					enabledBlockchainNetworks: ["NearTestnet"],
+					enabledVerificationTypes: ["KYC"],
+					evmProvider: window.ethereum,
+					baseUrl: "https://staging.kycdao.xyz",
+					sentryConfiguration: {
+						dsn: "https://23dafecec027439b9413cd50eb22567d@o1184096.ingest.sentry.io/4504559638413313",
+					},
+				},
+				width: "400px",
+				height: "650px",
+			}).open()
+		</script>
+	</body>
+</html>

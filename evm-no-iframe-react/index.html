@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<title>kycDAO React example</title>
+	</head>
+	<body>
+		<script
+			src="https://unpkg.com/react@18/umd/react.development.js"
+			integrity="sha384-0HL/VWVbwweJfp0saUL50fXRuSABCdVeinTBoJCDXprLkJ49VI0QMWNGMRt8ebnT"
+			crossorigin="anonymous"></script>
+		<script
+			src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+			integrity="sha384-79Od0yhavbvtuP2nWl+Y6mwgs8AlknSIikYSw0+uOc65GTyH8SW7e2hCyCB303Y2"
+			crossorigin="anonymous"></script>
+
+		<script
+			src="https://unpkg.com/@babel/standalone/babel.min.js"
+			integrity="sha384-h60PtfZRrCk3MOeU2VC3aiEQJB3v24K7oeBI5M5EWijeBB5xh/MlXpqb8kkpIx+C"
+			crossorigin="anonymous"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/@kycdao/widget@0.4.3/dist/web/KycDaoClient.js"
+			integrity="sha256-tL/A39E57UBm/t4r0n9Q8z523hzuwIpPpHZKW4FHDYM="
+			crossorigin="anonymous"></script>
+
+		<script type="text/babel">
+			//////////////// this part needs to go into SDK package  ///////////
+
+			const defaultConfig = {
+				demoMode: true,
+				enabledBlockchainNetworks: ["PolygonMumbai"],
+				enabledVerificationTypes: ["KYC"],
+				evmProvider: window.ethereum,
+				baseUrl: "https://sandbox.kycdao.xyz",
+				sentryConfiguration: {
+					dsn: "https://23dafecec027439b9413cd50eb22567d@o1184096.ingest.sentry.io/4504559638413313",
+				},
+			}
+
+			const KycDaoWidget = ({ config }) => {
+				const conf = { ...defaultConfig, ...config }
+
+				const client = React.useRef(
+					(() => {
+						return new window.KycDaoClient({
+							config: conf,
+							height: "650px",
+							width: "400px",
+							parent: "#kycDaoMountingPoint",
+							onFail: () => {},
+							onSuccess: () => {},
+							url: window.location.origin,
+						})
+					})()
+				)
+
+				React.useEffect(() => {
+					const currentClient = client.current
+
+					if (currentClient) {
+						// "initializer"
+						currentClient.open()
+
+						return () => {
+							// "destructor"
+							if (currentClient.isOpen) {
+								currentClient.close()
+							}
+						}
+					}
+				}, [client.current?.isOpen])
+
+				return (
+					<div className="modal-container">
+						<div
+							style={{
+								position: "absolute",
+								top: 0,
+								left: 0,
+								bottom: 0,
+								right: 0,
+								zIndex: 10,
+							}}
+							id="kycDaoMountingPoint"></div>
+					</div>
+				)
+			}
+
+			///////////////// example //////////
+			const ExamplePage = () => {
+				const kycDaoConf = {
+					baseUrl: "https://staging.kycdao.xyz",
+				}
+
+				return (
+					<KycDaoWidget
+						config={kycDaoConf}
+						onFail={() => console.log}
+						onSuccess={() => console.log}
+					/>
+				)
+			}
+		</script>
+
+		<div id="react"></div>
+
+		<script type="text/babel">
+			"use strict"
+
+			const Widget = () => {
+				const hideWidget = () => {}
+				return (
+					<div>
+						<ExamplePage />
+						\\o/
+						<h1>test</h1>
+					</div>
+				)
+			}
+
+			const domContainer = document.querySelector("#react")
+			const root = ReactDOM.createRoot(domContainer)
+
+			root.render(React.createElement(Widget))
+		</script>
+	</body>
+</html>

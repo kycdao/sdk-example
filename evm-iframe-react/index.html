@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>kycDAO React example</title>
+	</head>
+	<body>
+		<button id="opener">Open modal</button>
+		<div id="modalParent"></div>
+		<script
+			src="https://cdn.jsdelivr.net/npm/@kycdao/widget@0.4.3/dist/web/KycDaoIframeClient.js"
+			integrity="sha256-9n/I61IH3VfrfknjuVJsx9kErOlj49KIxyUryKO/a9Q="
+			crossorigin="anonymous"></script>
+
+		<script type="module">
+			console.log(kycDaoWebSdk)
+			window.onload = () => {
+				const opener = document.getElementById("opener")
+				const parent = document.getElementById("modalParent")
+
+				const iframeClient = new KycDaoIframeClient({
+					parent,
+					iframeOptions: {
+						url: "https://sdk.kycdao.xyz/iframe.html",
+						messageTargetOrigin: window.origin,
+					},
+					config: {
+						demoMode: true,
+						enabledBlockchainNetworks: ["PolygonMumbai"],
+						enabledVerificationTypes: ["KYC"],
+						evmProvider: "ethereum",
+						baseUrl: "https://staging.kycdao.xyz",
+						sentryConfiguration: {
+							dsn: "https://23dafecec027439b9413cd50eb22567d@o1184096.ingest.sentry.io/4504559638413313",
+						},
+					},
+					modal: true,
+				})
+
+				function openModal() {
+					iframeClient.open()
+				}
+
+				opener.addEventListener("click", openModal)
+			}
+		</script>
+	</body>
+</html>

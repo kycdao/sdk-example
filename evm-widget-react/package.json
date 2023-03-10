@@ -4,13 +4,14 @@
 	"homepage": ".",
 	"private": true,
 	"dependencies": {
-		"@kycdao/widget": "^0.4.3",
+		"@kycdao/widget": "^0.5.8",
 		"buffer": "^6.0.3",
 		"cross-env": "^7.0.3",
 		"react": "^18.2.0",
 		"react-app-rewired": "^2.2.1",
 		"react-dom": "^18.2.0",
-		"react-scripts": "5.0.1"
+		"react-scripts": "5.0.1",
+		"styled-components": "^5.3.8"
 	},
 	"scripts": {
 		"start": "cross-env HTTPS=true PORT=4002 GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true BROWSER=none react-app-rewired start",

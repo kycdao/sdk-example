@@ -4,7 +4,7 @@ overrides:
   nth-check@<2.0.1: '>=2.0.1'
 
 specifiers:
-  '@kycdao/widget': ^0.4.3
+  '@kycdao/widget': ^0.5.8
   '@types/node': ^18.11.18
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
@@ -13,15 +13,17 @@ specifiers:
   gatsby-plugin-pnpm: ^1.2.10
   react: ^18.2.0
   react-dom: ^18.2.0
+  styled-components: ^5.3.8
   typescript: ^4.9.4
 
 dependencies:
-  '@kycdao/widget': 0.4.6_yxvoazjzrz3vxgztr4kgwkvpru
+  '@kycdao/widget': 0.5.8_qh3wwxgpezx5mvng7xxvui3rme
   better-sqlite3: 8.1.0
   gatsby: 5.7.0_ygqkwb4gg3aean7xjfdauovyqq
   gatsby-plugin-pnpm: 1.2.10_gatsby@5.7.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  styled-components: 5.3.8_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
   '@types/node': 18.14.2
@@ -1964,7 +1966,7 @@ packages:
     dependencies:
       '@graphql-tools/utils': 9.2.1_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /@graphql-tools/optimize/1.3.1_graphql@16.6.0:
@@ -1973,7 +1975,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /@graphql-tools/relay-operation-optimizer/6.5.17_graphql@16.6.0:
@@ -1984,7 +1986,7 @@ packages:
       '@ardatan/relay-compiler': 12.0.0_graphql@16.6.0
       '@graphql-tools/utils': 9.2.1_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -1998,7 +2000,7 @@ packages:
       '@graphql-tools/merge': 8.3.18_graphql@16.6.0
       '@graphql-tools/utils': 9.2.1_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
       value-or-promise: 1.0.12
     dev: false
 
@@ -2008,7 +2010,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /@graphql-tools/utils/9.2.1_graphql@16.6.0:
@@ -2018,7 +2020,7 @@ packages:
     dependencies:
       '@graphql-typed-document-node/core': 3.1.2_graphql@16.6.0
       graphql: 16.6.0
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /@graphql-typed-document-node/core/3.1.2_graphql@16.6.0:
@@ -2465,25 +2467,24 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@kycdao/kycdao-sdk/0.6.6_4fl7bg44vshpizw53bvok6hupe:
-    resolution: {integrity: sha512-K6Fxnd72Y0H9xG8MT9SiaXmhdrStReb3dh9PL4rvBkDKT37rj39g53MbFFRy8NSAB7zai+9yRFPaC/FoSd8y/A==}
+  /@kycdao/kycdao-sdk/0.6.7_zbyzw2aqc66rrtthdlfq52njj4:
+    resolution: {integrity: sha512-23sQbaaL9rigaiDHd/mAIvUODLelEj9PcOy46pz8rMtiShuMEXOrtu5Mq9YLVsXZnjzv7Fx4UxLQ29ZafQKW0w==}
     peerDependencies:
-      near-api-js: ^0.44.2
-      persona: ^4.6.0
-      react: ^18.1.0
-      react-dom: ^18.1.0
-      styled-components: ^5.3.5
+      near-api-js: ^1
+      react: ^18
+      react-dom: ^18
+      styled-components: ^5
     dependencies:
       '@solana/wallet-adapter-base': 0.9.22_@solana+web3.js@1.73.3
       '@solana/wallet-adapter-wallets': 0.19.15_bdvkyrejymdypjcf7tsuw4bzte
       '@solana/web3.js': 1.73.3
       bn.js: 5.2.1
       bs58: 5.0.0
-      near-api-js: 0.44.2
-      persona: 4.7.2_2zpt4ilzykmne4yndyzrqd4gdm
+      near-api-js: 1.1.0
+      persona: 4.7.2_lfoodr2hdmy7hzfgwjnbclkduy
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+      styled-components: 5.3.8_biqbaboplfbrettd7655fr4n2y
     transitivePeerDependencies:
       - '@babel/runtime'
       - '@react-native-async-storage/async-storage'
@@ -2500,25 +2501,27 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@kycdao/widget/0.4.6_yxvoazjzrz3vxgztr4kgwkvpru:
-    resolution: {integrity: sha512-8sZ3PAO8XbehZI25ek09jrRR+heD4xl7mrQhhzGH2Gtr2Z3+4PY2oLHo0mSBsKbmtKHPMiyhKqKjUVK7nei6IQ==}
+  /@kycdao/widget/0.5.8_qh3wwxgpezx5mvng7xxvui3rme:
+    resolution: {integrity: sha512-Z0Q4W4Wa1AVIslAC85UprkL0TxhWs65PdXJ6hz6O06kG5gFDar7WyM2z9HzIZk4ETN0dAZzRVCILmrIC621bAg==}
     peerDependencies:
       react: ^18
       react-dom: ^18
+      styled-components: ^5
     dependencies:
-      '@kycdao/kycdao-sdk': 0.6.6_4fl7bg44vshpizw53bvok6hupe
+      '@kycdao/kycdao-sdk': 0.6.7_zbyzw2aqc66rrtthdlfq52njj4
       buffer: 6.0.3
       clsx: 1.2.1
-      near-api-js: 0.44.2
-      persona: 4.7.2_2zpt4ilzykmne4yndyzrqd4gdm
+      near-api-js: 1.1.0
+      persona: 4.7.2_lfoodr2hdmy7hzfgwjnbclkduy
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-error-boundary: 3.1.4_react@18.2.0
       react-scripts: 5.0.1_j5ip3o3v6sktjzl5cxtjyfbuo4
       react-swipeable: 7.0.0_react@18.2.0
+      react-twitter-embed: 4.0.4_biqbaboplfbrettd7655fr4n2y
       rxjs: 7.8.0
       stream: 0.0.2
-      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+      styled-components: 5.3.8_biqbaboplfbrettd7655fr4n2y
     transitivePeerDependencies:
       - '@babel/plugin-syntax-flow'
       - '@babel/plugin-transform-react-jsx'
@@ -2544,7 +2547,6 @@ packages:
       - lokijs
       - node-notifier
       - node-sass
-      - react-is
       - rework
       - rework-visit
       - sass
@@ -4640,7 +4642,7 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.21.1
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
     dev: false
 
   /@types/eslint/7.29.0:
@@ -5469,7 +5471,7 @@ packages:
   /@walletconnect/window-metadata/1.0.0:
     resolution: {integrity: sha512-9eFvmJxIKCC3YWOL97SgRkKhlyGXkrHwamfechmqszbypFspaSk+t2jQXAEU7YClHF6Qjw5eYOmy1//zFi9/GA==}
     dependencies:
-      '@walletconnect/window-getters': 1.0.0
+      '@walletconnect/window-getters': 1.0.1
     dev: false
 
   /@walletconnect/window-metadata/1.0.1:
@@ -6230,7 +6232,7 @@ packages:
       gatsby-core-utils: 4.7.0
     dev: false
 
-  /babel-plugin-styled-components/2.0.7_styled-components@5.3.6:
+  /babel-plugin-styled-components/2.0.7_styled-components@5.3.8:
     resolution: {integrity: sha512-i7YhvPgVqRKfoQ66toiZ06jPNA3p6ierpfUuEWxNF+fV27Uv5gxBkf8KZLHUCc1nFA9j6+80pYoIpqCeyW3/bA==}
     peerDependencies:
       styled-components: '>= 2'
@@ -6240,7 +6242,7 @@ packages:
       babel-plugin-syntax-jsx: 6.18.0
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+      styled-components: 5.3.8_biqbaboplfbrettd7655fr4n2y
     dev: false
 
   /babel-plugin-syntax-jsx/6.18.0:
@@ -6486,10 +6488,6 @@ packages:
     resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
     dev: false
 
-  /bn.js/5.2.0:
-    resolution: {integrity: sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw==}
-    dev: false
-
   /bn.js/5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
     dev: false
@@ -6525,14 +6523,6 @@ packages:
 
   /boolbase/1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
-    dev: false
-
-  /borsh/0.6.0:
-    resolution: {integrity: sha512-sl5k89ViqsThXQpYa9XDtz1sBl3l1lI313cFUY1HKr+wvMILnb+58xpkqTNrYbelh99dY7K8usxoCusQmqix9Q==}
-    dependencies:
-      bn.js: 5.2.0
-      bs58: 4.0.1
-      text-encoding-utf-8: 1.0.2
     dev: false
 
   /borsh/0.7.0:
@@ -6856,7 +6846,7 @@ packages:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
       upper-case-first: 2.0.2
     dev: false
 
@@ -6943,7 +6933,7 @@ packages:
       path-case: 3.0.4
       sentence-case: 3.0.4
       snake-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /char-regex/1.0.2:
@@ -7266,7 +7256,7 @@ packages:
     resolution: {integrity: sha512-I2hSBi7Vvs7BEuJDr5dDHfzb/Ruj3FyvFyh7KLilAjNQw3Be+xgqUBA2W6scVEcL0hL1dwPRtIqEPVUCKkSsyQ==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
       upper-case: 2.0.2
     dev: false
 
@@ -8196,7 +8186,7 @@ packages:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /dot-prop/5.3.0:
@@ -10645,7 +10635,7 @@ packages:
     resolution: {integrity: sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==}
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /hmac-drbg/1.0.1:
@@ -11149,7 +11139,7 @@ packages:
   /is-lower-case/2.0.2:
     resolution: {integrity: sha512-bVcMJy4X5Og6VZfdOZstSexlEy20Sr0k/p/b2IlQJlfdKAQuMpiv5w2Ccxb8sKdRUNAG1PnHVHjFSdRDVS6NlQ==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /is-map/2.0.2:
@@ -11327,7 +11317,7 @@ packages:
   /is-upper-case/2.0.2:
     resolution: {integrity: sha512-44pxmxAvnnAOwBg4tHPnkfvgjPwbc5QIsSstNU+YcJ1ovxVzCWpSGosPJOZh/a1tdl81fbgnLc9LLv+x2ywbPQ==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /is-valid-domain/0.1.6:
@@ -12474,13 +12464,13 @@ packages:
   /lower-case-first/2.0.2:
     resolution: {integrity: sha512-EVm/rR94FJTZi3zefZ82fLWab+GX14LJN4HrWBcuo6Evmsl9hEfnqxgcHCKb9q+mNf6EVdsjx/qucYFIIB84pg==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /lower-case/2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /lowercase-keys/2.0.0:
@@ -12900,11 +12890,11 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: false
 
-  /near-api-js/0.44.2:
-    resolution: {integrity: sha512-eMnc4V+geggapEUa3nU2p8HSHn/njtloI4P2mceHQWO8vDE1NGpnAw8FuTBrLmXSgIv9m6oocgFc9t3VNf5zwg==}
+  /near-api-js/1.1.0:
+    resolution: {integrity: sha512-qYKv1mYsaDZc2uYndhS+ttDhR9+60qFc+ZjD6lWsAxr3ZskMjRwPffDGQZYhC7BRDQMe1HEbk6d5mf+TVm0Lqg==}
     dependencies:
-      bn.js: 5.2.0
-      borsh: 0.6.0
+      bn.js: 5.2.1
+      borsh: 0.7.0
       bs58: 4.0.1
       depd: 2.0.0
       error-polyfill: 0.1.3
@@ -12939,7 +12929,7 @@ packages:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /node-abi/3.33.0:
@@ -13426,7 +13416,7 @@ packages:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /password-prompt/1.1.2:
@@ -13440,7 +13430,7 @@ packages:
     resolution: {integrity: sha512-qO4qCFjXqVTrcbPt/hQfhTQ+VhFsqNKOPtytgNKkKxSoEp3XPUQ8ObFuePylOIok5gjn69ry8XiULxCwot3Wfg==}
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /path-exists/3.0.0:
@@ -13517,7 +13507,7 @@ packages:
     resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
     dev: false
 
-  /persona/4.7.2_2zpt4ilzykmne4yndyzrqd4gdm:
+  /persona/4.7.2_lfoodr2hdmy7hzfgwjnbclkduy:
     resolution: {integrity: sha512-mqBFDMYd02kdhYML0l64DuCZSqGg1D4/er/Ejj+UGdW5N2QL2CqtQO/irU6mMJmTA0404xAgM4MwJ6gyjSjzqA==}
     peerDependencies:
       react: '>= 16'
@@ -13529,7 +13519,7 @@ packages:
       qs: 6.11.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
+      styled-components: 5.3.8_biqbaboplfbrettd7655fr4n2y
     dev: false
 
   /physical-cpu-count/2.0.0:
@@ -15020,6 +15010,18 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-twitter-embed/4.0.4_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-2JIL7qF+U62zRzpsh6SZDXNI3hRNVYf5vOZ1WRcMvwKouw+xC00PuFaD0aEp2wlyGaZ+f4x2VvX+uDadFQ3HVA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      scriptjs: 2.5.9
+    dev: false
+
   /react/16.13.1:
     resolution: {integrity: sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==}
     engines: {node: '>=0.10.0'}
@@ -15562,6 +15564,10 @@ packages:
       ajv-keywords: 5.1.0_ajv@8.12.0
     dev: false
 
+  /scriptjs/2.5.9:
+    resolution: {integrity: sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==}
+    dev: false
+
   /scrypt-js/3.0.1:
     resolution: {integrity: sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==}
     dev: false
@@ -15655,7 +15661,7 @@ packages:
     resolution: {integrity: sha512-8LS0JInaQMCRoQ7YUytAo/xUu5W2XnQxV2HI/6uM6U7CITS1RqPElr30V6uIqyMKM9lJGRVFy5/4CuzcixNYSg==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
       upper-case-first: 2.0.2
     dev: false
 
@@ -15858,7 +15864,7 @@ packages:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /socket.io-adapter/2.4.0:
@@ -16022,7 +16028,7 @@ packages:
   /sponge-case/1.0.1:
     resolution: {integrity: sha512-dblb9Et4DAtiZ5YSUZHLl4XhH4uK80GhAZrVXdN4O2P4gQ40Wa5UIOPUHlA/nFd2PLblBZWUioLMMAVrgpoYcA==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /sprintf-js/1.0.3:
@@ -16295,10 +16301,9 @@ packages:
       webpack: 5.75.0
     dev: false
 
-  /styled-components/5.3.6_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-hGTZquGAaTqhGWldX7hhfzjnIYBZ0IXQXkCYdvF1Sq3DsUaLx6+NTHC5Jj1ooM2F68sBiVz3lvhfwQs/S3l6qg==}
+  /styled-components/5.3.8_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-6jQrlvaJQ16uWVVO0rBfApaTPItkqaG32l3746enNZzpMDxMvzmHzj8rHUg39bvVtom0Y8o8ZzWuchEXKGjVsg==}
     engines: {node: '>=10'}
-    requiresBuild: true
     peerDependencies:
       react: '>= 16.8.0'
       react-dom: '>= 16.8.0'
@@ -16309,7 +16314,7 @@ packages:
       '@emotion/is-prop-valid': 1.2.0
       '@emotion/stylis': 0.8.5
       '@emotion/unitless': 0.7.5
-      babel-plugin-styled-components: 2.0.7_styled-components@5.3.6
+      babel-plugin-styled-components: 2.0.7_styled-components@5.3.8
       css-to-react-native: 3.2.0
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
@@ -16413,7 +16418,7 @@ packages:
   /swap-case/2.0.2:
     resolution: {integrity: sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /symbol-tree/3.2.4:
@@ -16596,7 +16601,7 @@ packages:
   /title-case/3.0.3:
     resolution: {integrity: sha512-e1zGYRvbffpcHIrnuqT0Dh+gEJtDaxDSoG4JAIpq4oDFyooziLBIiYQv0GBT4FUAnUop5uZ1hiIAj7oAF6sOCA==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /tmp/0.0.33:
@@ -16942,13 +16947,13 @@ packages:
   /upper-case-first/2.0.2:
     resolution: {integrity: sha512-514ppYHBaKwfJRK/pNC6c/OxfGa0obSnAl106u97Ed0I625Nin96KAjttZF6ZL3e1XLtphxnqrOi9iWgm+u+bg==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /upper-case/2.0.2:
     resolution: {integrity: sha512-KgdgDGJt2TpuwBUIjgG6lzw2GWFRCW9Qkfkiv0DxqHHLYJHmtmdUIKcZd8rHgFSjopVTlw6ggzCm1b8MFQwikg==}
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.5.0
     dev: false
 
   /uri-js/4.4.1:

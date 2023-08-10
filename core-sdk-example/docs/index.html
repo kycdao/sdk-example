@@ -33,6 +33,10 @@
 			src="https://cdn.jsdelivr.net/npm/@kycdao/kycdao-sdk@0.6.7/dist/kycdao-sdk.min.js"
 			integrity="sha256-cIPMIlAHkaQmJRd+EOyBKcVc1gVF314WSK5Ekok1Wqs="
 			crossorigin="anonymous"></script>
+		<!-- Uncomment for local testing -->
+		{# <script
+			src="http://localhost:4000/kycdao-sdk.min.js"
+			crossorigin="anonymous"></script> #}
 		<script src="assets/js/index.js"></script>
 	</head>
 
@@ -221,6 +225,21 @@
 							</button>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="aptos-status"
+							>Aptos support status:</label
+						>
+						<div class="col-sm-9">
+							<p class="form-control-static" id="aptos-status"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-3 col-sm-4">
+							<button type="button" class="btn btn-primary" id="aptos-login">
+								Connect with Aptos
+							</button>
+						</div>
+					</div>					
 					<div class="form-group">
 						<label class="col-sm-3 control-label" for="wallet-status"
 							>Connected wallet:</label

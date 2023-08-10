@@ -99,10 +99,12 @@ const updateWalletConnectionElements = () => {
   const evmStatus = document.getElementById("evm-status");
   const nearStatus = document.getElementById("near-status");
   const solanaStatus = document.getElementById("solana-status");
+  const aptosStatus = document.getElementById("aptos-status");
   const walletStatus = document.getElementById("wallet-status");
   const evmButton = document.getElementById("evm-login");
   const nearButton = document.getElementById("near-login");
   const solanaButton = document.getElementById("solana-login");
+  const aptosButton = document.getElementById("aptos-login");
   const logoutButton = document.getElementById("wallet-logout");
 
   const evmProviderConfigured = kycDaoStatus.evmProviderConfigured;
@@ -138,6 +140,18 @@ const updateWalletConnectionElements = () => {
     solanaButton.title = "";
   }
 
+  const aptosNetwork = kycDaoStatus.aptosNetworkConnected;
+  aptosStatus.innerHTML = aptosNetwork
+    ? `Configured for ${aptosNetwork}`
+    : "Aptos support is not enabled";
+  if (!aptosNetwork) {
+    aptosButton.disabled = true;
+    aptosButton.title = "Aptos support is not enabled";
+  } else {
+    aptosButton.removeAttribute("disabled");
+    aptosButton.title = "";
+  }
+
   if (!kycDao.walletConnected) {
     walletStatus.innerHTML = "Not connected";
     logoutButton.disabled = true;
@@ -166,6 +180,10 @@ const updateWalletConnectionElements = () => {
         logoutButton.removeAttribute("disabled");
         logoutButton.title = "";
         break;
+      case "Aptos":
+        logoutButton.removeAttribute("disabled");
+        logoutButton.title = "";
+        break;
     }
   }
 };
@@ -175,6 +193,7 @@ const walletConnectionSetup = () => {
   const evmButton = document.getElementById("evm-login");
   const nearButton = document.getElementById("near-login");
   const solanaButton = document.getElementById("solana-login");
+  const aptosButton = document.getElementById("aptos-login");
   const logoutButton = document.getElementById("wallet-logout");
 
   evmButton.addEventListener("click", async () => {
@@ -200,6 +219,16 @@ const walletConnectionSetup = () => {
   solanaButton.addEventListener("click", async () => {
     try {
       await kycDao.connectWallet("Solana");
+      document.dispatchEvent(walletChanged);
+      document.dispatchEvent(loginStatusChanged);
+    } catch (e) {
+      walletStatus.innerHTML = e;
+    }
+  });
+
+  aptosButton.addEventListener("click", async () => {
+    try {
+      await kycDao.connectWallet("Aptos");
       document.dispatchEvent(walletChanged);
       document.dispatchEvent(loginStatusChanged);
     } catch (e) {
@@ -651,6 +680,11 @@ const initKycdao = async (chain) => {
         kycDaoSdk.SolanaBlockchainNetworks
       );
       break;
+    case "Aptos":
+      enabledBlockchainNetworks = Object.keys(
+        kycDaoSdk.AptosBlockchainNetworks
+      );
+      break;
     default:
       enabledBlockchainNetworks = [];
       break;
@@ -658,10 +692,12 @@ const initKycdao = async (chain) => {
 
   const kycDaoConfig = {
     baseUrl: "https://staging.kycdao.xyz",
+    // baseUrl: "http://localhost:8080",
     enabledBlockchainNetworks,
     enabledVerificationTypes: ["KYC"],
     demoMode: true,
     evmProvider: window.ethereum,
+    // publicApiPath: "public/",
     sentryConfiguration: {
       dsn: 'https://23dafecec027439b9413cd50eb22567d@o1184096.ingest.sentry.io/4504559638413313',
     }
